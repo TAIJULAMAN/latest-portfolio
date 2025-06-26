@@ -77,6 +77,26 @@ const SkillBar = ({ name, level, color = 'primary' }) => {
   );
 };
 
+const SkillCategory = ({ title, skills }) => (
+  <div className="mb-8">
+    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
+      {title}:
+    </h4>
+    <div className="flex flex-wrap gap-2">
+      {skills.map((skill, index) => (
+        <motion.span
+          key={index}
+          className="px-3 py-1.5 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300"
+          whileHover={{ y: -2, scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          {skill}
+        </motion.span>
+      ))}
+    </div>
+  </div>
+);
+
 const ExperienceItem = ({ role, company, duration, description, isLast }) => (
   <motion.div 
     className="relative pl-8 pb-8 group"
@@ -126,13 +146,23 @@ export const About = () => {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
-  const skills = [
-    { name: 'JavaScript', level: 90, color: 'primary' },
-    { name: 'React', level: 88, color: 'primary' },
-    { name: 'Node.js', level: 85, color: 'emerald-500' },
-    { name: 'TypeScript', level: 80, color: 'blue-500' },
-    { name: 'MongoDB', level: 75, color: 'green-500' },
-    { name: 'AWS', level: 70, color: 'yellow-500' },
+  const technicalSkills = [
+    {
+      title: "Languages",
+      skills: ["C", "C++", "JavaScript", "TypeScript"]
+    },
+    {
+      title: "Frontend",
+      skills: ["HTML5", "CSS3", "Bootstrap", "Tailwind", "MUI", "Ant Design", "React", "Redux", "NextJS"]
+    },
+    {
+      title: "Backend",
+      skills: ["NodeJS", "ExpressJS", "Mongoose", "MongoDB", "Prisma", "KnexJS", "PostgreSQL", "GraphQL", "Socket.IO"]
+    },
+    {
+      title: "Deployment",
+      skills: ["CI/CD", "Docker", "AWS", "Digital Ocean", "Hostinger"]
+    }
   ];
 
   const experiences = [
@@ -323,7 +353,7 @@ export const About = () => {
             </TabContent>
 
             <TabContent isActive={activeTab === 'skills'}>
-              <div className="grid md:grid-cols-2 gap-12">
+              <div className="grid md:grid-cols-1 gap-12">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -333,20 +363,28 @@ export const About = () => {
                   <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-8">
                     Technical <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Skills</span>
                   </h3>
-                  {skills.map((skill, index) => (
-                    <SkillBar key={index} {...skill} />
-                  ))}
+                  <div className="space-y-6">
+                    {technicalSkills.map((category, index) => (
+                      <SkillCategory 
+                        key={index} 
+                        title={category.title} 
+                        skills={category.skills} 
+                      />
+                    ))}
+                  </div>
                 </motion.div>
+                
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: 0.1 }}
+                  className="mt-8"
                 >
                   <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-8">
                     Professional <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Skills</span>
                   </h3>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {[
                       { name: 'Problem Solving', level: 95 },
                       { name: 'Teamwork', level: 90 },
@@ -367,10 +405,10 @@ export const About = () => {
                         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary dark:text-primary-400 flex items-center justify-center text-xl mb-2 mx-auto">
                           {index % 3 === 0 ? '💡' : index % 3 === 1 ? '🤝' : '🎨'}
                         </div>
-                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center mb-2">
                           {skill.name}
                         </p>
-                        <div className="mt-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                           <motion.div
                             className="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
                             initial={{ width: 0 }}
