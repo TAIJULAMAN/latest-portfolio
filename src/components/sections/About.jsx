@@ -410,54 +410,6 @@ export const About = () => {
                     ))}
                   </div>
                 </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className="mt-8"
-                >
-                  <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-8">
-                    Professional <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Skills</span>
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {[
-                      { name: 'Problem Solving', level: 95 },
-                      { name: 'Teamwork', level: 90 },
-                      { name: 'Communication', level: 88 },
-                      { name: 'Project Management', level: 85 },
-                      { name: 'Creativity', level: 92 },
-                      { name: 'Leadership', level: 87 },
-                    ].map((skill, index) => (
-                      <motion.div
-                        key={index}
-                        className="bg-white dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300"
-                        whileHover={{ y: -5 }}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-50px" }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
-                      >
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary dark:text-primary-400 flex items-center justify-center text-xl mb-2 mx-auto">
-                          {index % 3 === 0 ? '💡' : index % 3 === 1 ? '🤝' : '🎨'}
-                        </div>
-                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center mb-2">
-                          {skill.name}
-                        </p>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                          <motion.div
-                            className="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${skill.level}%` }}
-                            viewport={{ once: true, margin: "-50px" }}
-                            transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
-                          />
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
               </div>
             </TabContent>
 
