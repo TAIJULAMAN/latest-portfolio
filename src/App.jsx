@@ -37,13 +37,13 @@ function App() {
                                         <section id="home" className="pt-5 md:pt-10 flex items-center">
                                                   <Hero />
                                         </section>
-                                        <section id="about" className="pb-10 dark:bg-gray-900">
+                                        <section id="about">
                                                   <About />
                                         </section>
-                                        <section id="projects" className="">
+                                        <section id="projects">
                                                   <Projects />
                                         </section>
-                                        <section id="contact" className="pb-10 dark:bg-gray-900">
+                                        <section id="contact">
                                                   <Contact />
                                         </section>
                               </main>
