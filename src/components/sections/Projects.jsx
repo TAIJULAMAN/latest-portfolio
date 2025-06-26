@@ -59,27 +59,11 @@ export const Projects = () => {
       tags: ['Next.js', 'TypeScript', 'Firebase', 'Tailwind CSS'],
       githubUrl: 'https://github.com/yourusername/task-manager',
       liveUrl: 'https://taskmanager-demo.com'
-    },
-    {
-      id: 7,
-      title: 'Portfolio Website',
-      description: 'A personal portfolio website built with modern web technologies to showcase projects and skills.',
-      tags: ['React', 'Vite', 'Tailwind CSS', 'Framer Motion'],
-      githubUrl: 'https://github.com/yourusername/portfolio',
-      liveUrl: 'https://yourportfolio.com'
-    },
-    {
-      id: 8,
-      title: 'Weather Dashboard',
-      description: 'A weather application that displays current weather and forecast using a weather API with location services.',
-      tags: ['React', 'OpenWeather API', 'Geolocation', 'Chart.js'],
-      githubUrl: 'https://github.com/yourusername/weather-app',
-      liveUrl: 'https://weatherapp-demo.com'
-    },
+    }
   ];
 
   return (
-    <section id="projects" className="relative py-20 overflow-hidden">
+    <section id="projects" className="relative py-20 max-w-7xl mx-auto overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 -z-10">
         <motion.div
@@ -117,7 +101,7 @@ export const Projects = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-5 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 relative">
           {projects.map((project, index) => (
             <motion.div
               key={project.id}

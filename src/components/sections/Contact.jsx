@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiMail, FiPhone, FiMapPin, FiGithub, FiLinkedin, FiTwitter, FiSend } from 'react-icons/fi';
 
-export const Contact = () => {
+const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
     message: ''
   });
   
@@ -18,7 +17,7 @@ export const Contact = () => {
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }));
+    }));  
   };
 
   const handleSubmit = async (e) => {
@@ -38,7 +37,6 @@ export const Contact = () => {
       setFormData({
         name: '',
         email: '',
-        subject: '',
         message: ''
       });
       
@@ -72,17 +70,18 @@ export const Contact = () => {
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    show: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1]
+      } 
+    }
   };
 
   return (
     <section id="contact" className="relative py-20 overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full filter blur-3xl opacity-70 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-secondary/10 rounded-full filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
-      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <motion.div
@@ -208,7 +207,11 @@ export const Contact = () => {
               <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`mb-6 p-4 rounded-lg ${submitStatus.success ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'}`}
+                className={`mb-6 p-4 rounded-lg ${
+                  submitStatus.success 
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' 
+                    : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                }`}
               >
                 {submitStatus.message}
               </motion.div>
@@ -216,7 +219,7 @@ export const Contact = () => {
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="relative">
+                <div className="relative group">
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Your Name <span className="text-red-500">*</span>
                   </label>
@@ -235,7 +238,7 @@ export const Contact = () => {
                   </div>
                 </div>
                 
-                <div className="relative">
+                <div className="relative group">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Your Email <span className="text-red-500">*</span>
                   </label>
@@ -255,25 +258,7 @@ export const Contact = () => {
                 </div>
               </div>
               
-              <div className="relative">
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Subject
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-900/50 focus:ring-2 focus:ring-primary/30 focus:border-transparent backdrop-blur-sm transition-all duration-300"
-                    placeholder="What's this about?"
-                  />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                </div>
-              </div>
-              
-              <div className="relative">
+              <div className="relative group">
                 <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Your Message <span className="text-red-500">*</span>
                 </label>
@@ -325,3 +310,5 @@ export const Contact = () => {
     </section>
   );
 };
+
+export default Contact;
