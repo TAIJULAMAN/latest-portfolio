@@ -253,8 +253,8 @@ export const Header = () => {
 
   return (
     <header className={`fixed w-full backdrop-blur-md z-50 transition-all duration-300  ${scrolled
-        ? 'bg-white/90 dark:bg-gray-900/90 shadow-md py-2'
-        : 'bg-white/80 dark:bg-gray-900/80 py-4'
+      ? 'bg-white/90 dark:bg-gray-900/90 shadow-md py-2'
+      : 'bg-white/80 dark:bg-gray-900/80 py-4'
       }`}>
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
         <a
@@ -309,21 +309,32 @@ export const Header = () => {
 
       {/* Mobile menu */}
       <div
-        className={`md:hidden fixed inset-0 bg-white dark:bg-gray-900 z-40 transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
+        className={`md:hidden fixed w-full bg-dark dark:bg-white z-40 transform transition-transform duration-300 ease-in-out ${
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
       >
-        <div className="container mx-auto px-4 py-24 flex flex-col items-center space-y-8">
+        <nav className="h-full w-full flex flex-col items-center justify-center py-5 space-y-5 px-5">
           {navLinks.map((link) => (
             <a
-              key={link.href}
-              href={link.href}
-              className="text-2xl font-medium text-gray-800 dark:text-white hover:text-primary dark:hover:text-primary transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+              key={link?.href}
+              href={link?.href}
+              className="text-2xl font-medium text-white dark:text-gray-900 hover:text-primary dark:hover:text-primary transition-colors py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 w-full text-center"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMenuOpen(false);
+                // Scroll to the section after a small delay to allow menu to close
+                setTimeout(() => {
+                  const element = document.querySelector(link.href);
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }, 100);
+              }}
             >
-              {link.name}
+              {link?.name}
             </a>
           ))}
-        </div>
+        </nav>
       </div>
     </header>
   );
