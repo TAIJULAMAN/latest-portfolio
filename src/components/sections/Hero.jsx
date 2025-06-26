@@ -22,7 +22,7 @@ const Hero = () => {
   ];
 
   const stats = [
-    { value: '5+', label: 'Years Experience', icon: <FiCode /> },
+    { value: '1+', label: 'Years Experience', icon: <FiCode /> },
     { value: '50+', label: 'Projects Completed', icon: <FiLayers /> },
     { value: '100%', label: 'Client Satisfaction', icon: <FiSmartphone /> },
   ];
@@ -93,7 +93,7 @@ const Hero = () => {
                 sequence={[
                   'Frontend Developer',
                   1500,
-                  'UI/UX Designer',
+                  'Response Designer',
                   1500,
                   'Problem Solver',
                   1500,
@@ -248,7 +248,7 @@ const Hero = () => {
       </div>
 
       {/* Animated scroll indicator */}
-      <motion.div
+      {/* <motion.div
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -269,7 +269,7 @@ const Hero = () => {
             }}
           />
         </div>
-      </motion.div>
+      </motion.div> */}
     </div>
   );
 };
