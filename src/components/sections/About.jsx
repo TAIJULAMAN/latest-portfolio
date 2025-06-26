@@ -6,9 +6,9 @@ import { SiC, SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiCss3, SiBootst
 const TabButton = ({ active, onClick, children, icon: Icon }) => (
   <motion.button
     onClick={onClick}
-    className={`flex items-center px-6 py-3 rounded-xl font-medium transition-all duration-300 ${active
-        ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20'
-        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+    className={`flex items-center px-4 py-2 rounded-xl font-medium transition-all duration-300 ${active
+      ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20'
+      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
       }`}
     whileHover={{ y: -2 }}
     whileTap={{ scale: 0.98 }}
@@ -113,7 +113,7 @@ const SkillCategory = ({ title, skills }) => {
     if (hoverTimeout.current) {
       clearTimeout(hoverTimeout.current);
     }
-    
+
     setHoveredSkill(index);
     hoverTimeout.current = setTimeout(() => {
       setShowTooltip(true);
@@ -143,36 +143,36 @@ const SkillCategory = ({ title, skills }) => {
       </h4>
       <div className="flex flex-wrap gap-3">
         {skills.map((skill, index) => {
-          const skillData = skillIcons[skill] || { 
-            icon: skill, 
-            color: 'text-gray-800 dark:text-gray-200' 
+          const skillData = skillIcons[skill] || {
+            icon: skill,
+            color: 'text-gray-800 dark:text-gray-200'
           };
-          
+
           return (
-            <motion.div 
+            <motion.div
               key={index}
               className="relative group"
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
               initial={{ scale: 1 }}
-              whileHover={{ 
+              whileHover={{
                 y: -5,
                 scale: 1.05,
-                transition: { 
+                transition: {
                   type: 'spring',
                   stiffness: 300,
                   damping: 15
-                } 
+                }
               }}
               whileTap={{ scale: 0.95 }}
             >
-              <div 
+              <div
                 className={`p-3 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300 ${skillData.color} transform transition-transform duration-200`}
               >
                 {skillData.icon}
               </div>
-              
-              <motion.div 
+
+              <motion.div
                 className="absolute -bottom-10 left-1/2 transform -translate-x-1/2"
                 initial={{ opacity: 0, y: 5, scale: 0.95 }}
                 animate={{
@@ -190,19 +190,19 @@ const SkillCategory = ({ title, skills }) => {
                   <div className="absolute -top-1.5 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45"></div>
                 </div>
               </motion.div>
-              
+
               {hoveredSkill === index && (
-                <motion.div 
+                <motion.div
                   className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 opacity-0"
                   initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ 
+                  animate={{
                     opacity: 0.3,
                     scale: 1.1,
-                    transition: { 
+                    transition: {
                       duration: 0.4,
                       repeat: Infinity,
                       repeatType: 'reverse'
-                    } 
+                    }
                   }}
                 />
               )}
@@ -276,7 +276,7 @@ export const About = () => {
       title: "Backend",
       skills: ["NodeJS", "ExpressJS", "Mongoose", "MongoDB", "Prisma", "PostgreSQL", "GraphQL", "Socket.IO"]
     }
- 
+
   ];
 
   const experiences = [
@@ -332,7 +332,7 @@ export const About = () => {
     <section
       id="about"
       ref={targetRef}
-      className="relative py-24 bg-gray-50 dark:bg-gray-900/50 overflow-hidden"
+      className="relative py-24 dark:bg-gray-900/50 overflow-hidden max-w-7xl mx-auto"
     >
       {/* Animated background elements */}
       <motion.div
@@ -405,7 +405,7 @@ export const About = () => {
             </div>
           </div>
 
-          <div className="p-8">
+          <div className="p-5">
             <TabContent isActive={activeTab === 'about'}>
               <div className="grid md:grid-cols-2 gap-12 items-center">
                 <motion.div
@@ -428,7 +428,7 @@ export const About = () => {
                     with the developer community.
                   </p>
                   <motion.div
-                    className="flex flex-wrap gap-4"
+                    className="flex gap-2 md:gap-4 mb-10 whitespace-nowrap"
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -436,7 +436,7 @@ export const About = () => {
                   >
                     <a
                       href="#contact"
-                      className="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-medium hover:opacity-90 transition-all duration-300 flex items-center gap-2 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
+                      className="px-4 py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-medium hover:opacity-90 transition-all duration-300 flex items-center gap-2 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
                     >
                       Contact Me
                       <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -444,7 +444,7 @@ export const About = () => {
                     <a
                       href="/resume.pdf"
                       download
-                      className="px-6 py-3 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300 flex items-center gap-2 group"
+                      className="px-4 py-2.5 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300 flex items-center gap-2 group"
                     >
                       Download CV
                       <FiDownload className="w-5 h-5 group-hover:translate-y-0.5 transition-transform duration-300" />

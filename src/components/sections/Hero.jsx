@@ -28,7 +28,7 @@ const Hero = () => {
   ];
 
   return (
-    <div ref={targetRef} className="relative overflow-hidden min-h-screen max-w-7xl mx-auto flex items-center">
+    <div ref={targetRef} className="relative overflow-hidden max-w-7xl mx-auto flex items-center">
       {/* Animated background with gradient mesh */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 dark:from-gray-900 via-transparent to-transparent"></div>
@@ -67,7 +67,7 @@ const Hero = () => {
       <div className="container mx-auto px-4 py-24 md:py-32 lg:py-40 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <motion.div
-            className="col-span-7"
+            className="col-span-7 flex flex-col justify-center items-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -87,7 +87,7 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
             >
-              Hi, I'm <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Your Name</span>
+              Hi, I'm <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Hossain Ali</span>
               <br />
               <TypeAnimation
                 sequence={[
@@ -118,14 +118,14 @@ const Hero = () => {
             </motion.p>
 
             <motion.div
-              className="flex flex-wrap gap-4 mb-12"
+              className="flex gap-2 md:gap-4 mb-10"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
               <a
                 href="#contact"
-                className="px-6 py-3.5 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-medium hover:opacity-90 transition-all duration-300 flex items-center gap-2 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
+                className="px-4 py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-medium hover:opacity-90 transition-all duration-300 flex items-center gap-2 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
               >
                 Get In Touch
                 <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -133,7 +133,7 @@ const Hero = () => {
               <a
                 href="/resume.pdf"
                 download
-                className="px-6 py-3.5 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300 flex items-center gap-2 group"
+                className="px-4 py-2.5 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300 flex items-center gap-2 group"
               >
                 Download CV
                 <FiDownload className="w-5 h-5 group-hover:translate-y-0.5 transition-transform duration-300" />
@@ -161,12 +161,12 @@ const Hero = () => {
           </motion.div>
 
           <motion.div
-            className="col-span-5 mt-12 lg:mt-0 relative"
+            className="col-span-6 md:col-span-5 mt-12 lg:mt-0 relative  flex justify-center items-center w-full"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            <div className="relative mx-auto w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
+            <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
               {/* Decorative elements */}
               <motion.div
                 className="absolute -top-6 -left-6 w-24 h-24 bg-primary/10 rounded-2xl -z-10"
@@ -200,7 +200,6 @@ const Hero = () => {
                 <div className="absolute inset-2 bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border-4 border-white dark:border-gray-800 shadow-2xl">
                   {/* Replace with your image */}
                   <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
-                    {/* <span className="text-gray-400 dark:text-gray-600 text-lg">Your Photo</span> */}
                     <img src="./photo.jpg" alt="Profile" className="w-full h-full object-cover" />
                   </div>
                 </div>
@@ -246,30 +245,6 @@ const Hero = () => {
           </motion.div>
         </div>
       </div>
-
-      {/* Animated scroll indicator */}
-      {/* <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5, duration: 0.6 }}
-      >
-        <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">Scroll Down</div>
-        <div className="w-6 h-10 border-2 border-gray-300 dark:border-gray-600 rounded-full mx-auto flex justify-center p-1">
-          <motion.div
-            className="w-1 h-2 bg-gray-400 dark:bg-gray-500 rounded-full"
-            animate={{
-              y: [0, 8, 0],
-              opacity: [0.4, 1, 0.4],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-        </div>
-      </motion.div> */}
     </div>
   );
 };

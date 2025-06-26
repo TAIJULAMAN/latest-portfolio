@@ -18,10 +18,10 @@ const AnimatedLogo = ({ isDarkMode }) => {
 
   const pathVariants = {
     initial: { pathLength: 0, opacity: 0 },
-    animate: { 
-      pathLength: 1, 
+    animate: {
+      pathLength: 1,
       opacity: 1,
-      transition: { 
+      transition: {
         duration: 1.5,
         ease: 'easeInOut',
         staggerChildren: 0.2
@@ -34,14 +34,14 @@ const AnimatedLogo = ({ isDarkMode }) => {
   };
 
   const circleVariants = (index) => ({
-    initial: { 
-      opacity: 0, 
+    initial: {
+      opacity: 0,
       scale: 0,
       x: Math.sin(index * 0.5) * 20,
       y: Math.cos(index * 0.5) * 20
     },
-    animate: { 
-      opacity: 1, 
+    animate: {
+      opacity: 1,
       scale: 1,
       x: 0,
       y: 0,
@@ -165,7 +165,7 @@ const AnimatedLogo = ({ isDarkMode }) => {
           />
         )}
       </svg>
-      
+
       {/* Floating particles */}
       <AnimatePresence>
         {isHovered && (
@@ -173,9 +173,8 @@ const AnimatedLogo = ({ isDarkMode }) => {
             {[...Array(8)].map((_, i) => (
               <motion.div
                 key={i}
-                className={`absolute w-1 h-1 rounded-full ${
-                  isDarkMode ? 'bg-white' : 'bg-blue-500'
-                }`}
+                className={`absolute w-1 h-1 rounded-full ${isDarkMode ? 'bg-white' : 'bg-blue-500'
+                  }`}
                 initial={{
                   x: 0,
                   y: 0,
@@ -253,14 +252,13 @@ export const Header = () => {
   };
 
   return (
-    <header className={`fixed w-full backdrop-blur-md z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-white/90 dark:bg-gray-900/90 shadow-md py-2' 
+    <header className={`fixed w-full backdrop-blur-md z-50 transition-all duration-300  ${scrolled
+        ? 'bg-white/90 dark:bg-gray-900/90 shadow-md py-2'
         : 'bg-white/80 dark:bg-gray-900/80 py-4'
-    }`}>
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        <a 
-          href="#home" 
+      }`}>
+      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+        <a
+          href="#home"
           className="relative z-10"
           aria-label="Home"
         >
@@ -280,7 +278,7 @@ export const Header = () => {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary dark:bg-primary-400 transition-all duration-300 group-hover:w-full"></span>
             </a>
           ))}
-          
+
           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -311,9 +309,8 @@ export const Header = () => {
 
       {/* Mobile menu */}
       <div
-        className={`md:hidden fixed inset-0 bg-white dark:bg-gray-900 z-40 transform transition-transform duration-300 ease-in-out ${
-          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`md:hidden fixed inset-0 bg-white dark:bg-gray-900 z-40 transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         <div className="container mx-auto px-4 py-24 flex flex-col items-center space-y-8">
           {navLinks.map((link) => (
