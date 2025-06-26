@@ -1,19 +1,21 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiUser, FiCode, FiBriefcase, FiAward, FiDownload } from 'react-icons/fi';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { FiUser, FiCode, FiBriefcase, FiAward, FiDownload, FiArrowRight } from 'react-icons/fi';
 
 const TabButton = ({ active, onClick, children, icon: Icon }) => (
-  <button
+  <motion.button
     onClick={onClick}
-    className={`flex items-center px-6 py-3 rounded-lg transition-all duration-300 ${
+    className={`flex items-center px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
       active
-        ? 'bg-primary text-white shadow-lg shadow-primary/20'
-        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+        ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20'
+        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
     }`}
+    whileHover={{ y: -2 }}
+    whileTap={{ scale: 0.98 }}
   >
     <Icon className="mr-2" />
     {children}
-  </button>
+  </motion.button>
 );
 
 const TabContent = ({ children, isActive }) => (
@@ -23,7 +25,7 @@ const TabContent = ({ children, isActive }) => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         className="mt-8"
       >
         {children}
@@ -32,45 +34,97 @@ const TabContent = ({ children, isActive }) => (
   </AnimatePresence>
 );
 
-const SkillBar = ({ name, level, color = 'primary' }) => (
-  <div className="mb-4">
-    <div className="flex justify-between mb-1">
-      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{name}</span>
-      <span className="text-sm text-gray-500">{level}%</span>
-    </div>
-    <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-      <motion.div
-        className={`h-full rounded-full bg-${color} ${color === 'primary' ? 'bg-primary' : ''}`}
-        initial={{ width: 0 }}
-        whileInView={{ width: `${level}%` }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, delay: 0.2 }}
-      />
-    </div>
-  </div>
-);
+const SkillBar = ({ name, level, color = 'primary' }) => {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
 
-const ExperienceItem = ({ role, company, duration, description }) => (
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="mb-6">
+      <div className="flex justify-between mb-2">
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{name}</span>
+        <span className="text-sm text-gray-500">{level}%</span>
+      </div>
+      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+        <motion.div
+          className={`h-full rounded-full bg-gradient-to-r from-${color} to-${color === 'primary' ? 'secondary' : color} ${color === 'primary' ? 'bg-primary' : ''}`}
+          initial={{ width: 0 }}
+          animate={{ width: isInView ? `${level}%` : 0 }}
+          transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const ExperienceItem = ({ role, company, duration, description, isLast }) => (
   <motion.div 
-    className="relative pl-8 pb-8 border-l-2 border-gray-200 dark:border-gray-700 last:border-l-0 last:pb-0 group"
+    className="relative pl-8 pb-8 group"
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.5, ease: "easeOut" }}
   >
-    <div className="absolute w-4 h-4 rounded-full bg-primary -left-2 top-1 group-hover:scale-125 transition-transform duration-300" />
-    <div className="absolute w-4 h-1 bg-gradient-to-r from-primary to-transparent -left-2 top-1" />
+    <div className="absolute left-0 top-1 w-4 h-4 rounded-full bg-gradient-to-r from-primary to-secondary group-hover:scale-125 transition-transform duration-300 z-10" />
+    {!isLast && (
+      <div className="absolute left-[7px] top-5 w-0.5 h-full bg-gradient-to-b from-primary/20 to-transparent" />
+    )}
     <div className="flex flex-col sm:flex-row sm:justify-between">
-      <h4 className="text-lg font-semibold text-gray-800 dark:text-white">{role}</h4>
-      <span className="text-sm text-primary font-medium">{duration}</span>
+      <h4 className="text-lg font-semibold text-gray-800 dark:text-white group-hover:text-primary dark:group-hover:text-primary-400 transition-colors">
+        {role}
+      </h4>
+      <span className="text-sm font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        {duration}
+      </span>
     </div>
     <p className="text-gray-600 dark:text-gray-300 font-medium mb-2">{company}</p>
     <p className="text-gray-500 dark:text-gray-400">{description}</p>
   </motion.div>
 );
 
+const StatCard = ({ value, label, icon: Icon }) => (
+  <motion.div 
+    className="bg-white dark:bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+  >
+    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary dark:text-primary-400 flex items-center justify-center text-xl mb-4">
+      <Icon className="w-6 h-6" />
+    </div>
+    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+    <div className="text-sm text-gray-500 dark:text-gray-400">{label}</div>
+  </motion.div>
+);
+
 export const About = () => {
   const [activeTab, setActiveTab] = useState('about');
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start end", "end start"]
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
   const skills = [
     { name: 'JavaScript', level: 90, color: 'primary' },
@@ -83,38 +137,44 @@ export const About = () => {
 
   const experiences = [
     {
-      role: 'Senior Frontend Developer',
-      company: 'TechCorp Inc.',
-      duration: '2021 - Present',
-      description: 'Leading frontend development for enterprise applications using React and TypeScript.'
-    },
-    {
-      role: 'Full Stack Developer',
-      company: 'WebSolutions LLC',
-      duration: '2019 - 2021',
-      description: 'Developed and maintained web applications using MERN stack.'
-    },
-    {
       role: 'Frontend Developer',
+      company: 'TechCorp Inc.',
+      duration: '2023 - Present',
+      description: 'Building modern web applications with React and Next.js, focusing on performance and user experience.'
+    },
+    {
+      role: 'Junior Developer',
+      company: 'WebSolutions LLC',
+      duration: '2022 - 2023',
+      description: 'Developed and maintained web applications using the MERN stack.'
+    },
+    {
+      role: 'Web Development Intern',
       company: 'Digital Agency',
-      duration: '2017 - 2019',
-      description: 'Built responsive and interactive user interfaces for various clients.'
+      duration: '2021 - 2022',
+      description: 'Assisted in building responsive websites and implementing UI/UX designs.'
     },
   ];
 
   const education = [
     {
-      degree: 'Master in Computer Science',
-      institution: 'Tech University',
-      duration: '2015 - 2017',
+      role: 'B.Sc. in Computer Science',
+      company: 'State University',
+      duration: '2018 - 2022',
       description: 'Specialized in Web Technologies and Software Engineering.'
     },
     {
-      degree: 'Bachelor of Science in CSE',
-      institution: 'State University',
-      duration: '2011 - 2015',
-      description: 'Major in Computer Science and Engineering.'
+      role: 'Web Development Bootcamp',
+      company: 'Coding Academy',
+      duration: '2021',
+      description: 'Intensive full-stack web development program.'
     },
+  ];
+
+  const stats = [
+    { value: '1+', label: 'Years Experience', icon: FiBriefcase },
+    { value: '50+', label: 'Projects Completed', icon: FiCode },
+    { value: '100%', label: 'Client Satisfaction', icon: FiAward },
   ];
 
   const tabs = [
@@ -125,25 +185,68 @@ export const About = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-gray-50 dark:bg-gray-900/50">
-      <div className="container mx-auto px-4">
+    <section 
+      id="about" 
+      ref={targetRef}
+      className="relative py-24 bg-gray-50 dark:bg-gray-900/50 overflow-hidden"
+    >
+      {/* Animated background elements */}
+      <motion.div 
+        className="absolute inset-0 -z-10"
+        style={{ y }}
+      >
+        <div className="absolute inset-0 opacity-30 dark:opacity-10">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDAwMDAiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0VjIwYTQgNCAwIDAwLTQtNEgyOGE0IDQgMCAwMC00IDR2MTRhNCA0IDAgMDA0IDHoNGE0IDQgMCAwMDQtNHpNMTYgMjRhNCA0IDAgMDE0LTRoNGE0IDQgMCAwMTQgNHYyYTQgNCAwIDAxLTQgNEgyMGE0IDQgMCAwMS00LTR2LTJ6TTAgMTh2MWE0IDQgMCAwMDQgNGg0YTQgNCAwIDAwNC00di0xYTQgNCAwIDAwLTRtMCAxNHYxYTQgNCAwIDAwNCA0aDRhNCA0IDAgMDA0LTR2LTFhNCA0IDAgMDAtNHpNMCAzNHYxYTQgNCAwIDAwNCA0aDRhNCA0IDAgMDA0LTR2LTFhNCA0IDAgMDAtNHpNMCA0djFhNCA0IDAgMDEtNCA0SDFhNCA0IDAgMDEtNC00VjRhNCA0IDAgMDE0LTRoMWE0IDQgMCAwMTQgNHoiLz48L2c+PC9nPjwvc3ZnPg==')]"></div>
+        </div>
         <motion.div
+          className="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-gradient-to-l from-primary/20 to-transparent rounded-full filter blur-3xl opacity-30"
+          animate={{
+            x: [0, -50, 0],
+            y: [0, 30, 0],
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      </motion.div>
+
+      <div className="container mx-auto px-4 relative">
+        <motion.div
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            About <span className="text-primary">Me</span>
+          <motion.div
+            className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary dark:text-primary-400 text-sm font-medium mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            My Journey
+          </motion.div>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            About <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Me</span>
           </h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mb-6 rounded-full"></div>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Get to know more about my professional journey and expertise
           </p>
         </motion.div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-          <div className="p-1 bg-gray-100 dark:bg-gray-700 rounded-t-2xl">
+        <motion.div 
+          className="bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700/50"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+        >
+          <div className="p-1 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-t-2xl">
             <div className="flex flex-wrap gap-2 p-2">
               {tabs.map((tab) => (
                 <TabButton
@@ -161,63 +264,87 @@ export const About = () => {
           <div className="p-8">
             <TabContent isActive={activeTab === 'about'}>
               <div className="grid md:grid-cols-2 gap-12 items-center">
-                <div>
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
                   <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-                    I'm a Passionate Developer
+                    I'm a Passionate <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Developer</span>
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6">
-                    With over 5 years of experience in web development, I specialize in building modern web applications
+                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    With a strong foundation in web development, I specialize in building modern web applications
                     using cutting-edge technologies. My expertise lies in creating responsive, accessible, and
                     performant user interfaces that deliver exceptional user experiences.
                   </p>
-                  <p className="text-gray-600 dark:text-gray-300 mb-8">
+                  <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                     I'm passionate about clean code, thoughtful design, and continuous learning. When I'm not coding,
                     you can find me exploring new technologies, contributing to open source, or sharing my knowledge
                     with the developer community.
                   </p>
-                  <a
-                    href="/resume.pdf"
-                    download
-                    className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                  <motion.div
+                    className="flex flex-wrap gap-4"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4, duration: 0.5 }}
                   >
-                    <FiDownload className="mr-2" />
-                    Download CV
-                  </a>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
-                    <h4 className="text-4xl font-bold text-primary mb-2">5+</h4>
-                    <p className="text-gray-600 dark:text-gray-300">Years Experience</p>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
-                    <h4 className="text-4xl font-bold text-primary mb-2">50+</h4>
-                    <p className="text-gray-600 dark:text-gray-300">Projects Completed</p>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
-                    <h4 className="text-4xl font-bold text-primary mb-2">30+</h4>
-                    <p className="text-gray-600 dark:text-gray-300">Happy Clients</p>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
-                    <h4 className="text-4xl font-bold text-primary mb-2">98%</h4>
-                    <p className="text-gray-600 dark:text-gray-300">Client Satisfaction</p>
-                  </div>
-                </div>
+                    <a
+                      href="#contact"
+                      className="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-medium hover:opacity-90 transition-all duration-300 flex items-center gap-2 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
+                    >
+                      Contact Me
+                      <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    </a>
+                    <a
+                      href="/resume.pdf"
+                      download
+                      className="px-6 py-3 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300 flex items-center gap-2 group"
+                    >
+                      Download CV
+                      <FiDownload className="w-5 h-5 group-hover:translate-y-0.5 transition-transform duration-300" />
+                    </a>
+                  </motion.div>
+                </motion.div>
+
+                <motion.div 
+                  className="grid grid-cols-2 gap-4"
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  {stats.map((stat, index) => (
+                    <StatCard key={index} {...stat} />
+                  ))}
+                </motion.div>
               </div>
             </TabContent>
 
             <TabContent isActive={activeTab === 'skills'}>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-                    Technical Skills
+              <div className="grid md:grid-cols-2 gap-12">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-8">
+                    Technical <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Skills</span>
                   </h3>
                   {skills.map((skill, index) => (
                     <SkillBar key={index} {...skill} />
                   ))}
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-                    Professional Skills
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                  <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-8">
+                    Professional <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Skills</span>
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     {[
@@ -228,33 +355,55 @@ export const About = () => {
                       { name: 'Creativity', level: 92 },
                       { name: 'Leadership', level: 87 },
                     ].map((skill, index) => (
-                      <div
+                      <motion.div
                         key={index}
-                        className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg text-center"
+                        className="bg-white dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300"
+                        whileHover={{ y: -5 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
                       >
-                        <div className="w-16 h-16 rounded-full border-4 border-primary flex items-center justify-center mx-auto mb-2">
-                          <span className="text-lg font-bold text-gray-800 dark:text-white">
-                            {skill.level}%
-                          </span>
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary dark:text-primary-400 flex items-center justify-center text-xl mb-2 mx-auto">
+                          {index % 3 === 0 ? '💡' : index % 3 === 1 ? '🤝' : '🎨'}
                         </div>
-                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
                           {skill.name}
                         </p>
-                      </div>
+                        <div className="mt-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                          <motion.div
+                            className="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${skill.level}%` }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
+                          />
+                        </div>
+                      </motion.div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               </div>
             </TabContent>
 
             <TabContent isActive={activeTab === 'experience'}>
               <div className="max-w-3xl mx-auto">
-                <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-8 text-center">
-                  Work Experience
-                </h3>
+                <motion.h3 
+                  className="text-2xl font-bold text-gray-800 dark:text-white mb-12 text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5 }}
+                >
+                  Work <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Experience</span>
+                </motion.h3>
                 <div className="space-y-8">
                   {experiences.map((exp, index) => (
-                    <ExperienceItem key={index} {...exp} />
+                    <ExperienceItem 
+                      key={index} 
+                      {...exp} 
+                      isLast={index === experiences.length - 1}
+                    />
                   ))}
                 </div>
               </div>
@@ -262,18 +411,28 @@ export const About = () => {
 
             <TabContent isActive={activeTab === 'education'}>
               <div className="max-w-3xl mx-auto">
-                <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-8 text-center">
-                  Education
-                </h3>
+                <motion.h3 
+                  className="text-2xl font-bold text-gray-800 dark:text-white mb-12 text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5 }}
+                >
+                  My <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Education</span>
+                </motion.h3>
                 <div className="space-y-8">
                   {education.map((edu, index) => (
-                    <ExperienceItem key={index} {...edu} />
+                    <ExperienceItem 
+                      key={index} 
+                      {...edu} 
+                      isLast={index === education.length - 1}
+                    />
                   ))}
                 </div>
               </div>
             </TabContent>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
