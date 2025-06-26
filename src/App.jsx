@@ -3,9 +3,9 @@ import { Header } from './components/layout/Header';
 import Hero from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Projects } from './components/sections/Projects';
-import { Contact } from './components/sections/Contact';
 import Footer from './components/layout/Footer';
 import { FiArrowUp } from 'react-icons/fi';
+import Contact from './components/sections/Contact';
 
 function App() {
           const [showScroll, setShowScroll] = useState(false);

@@ -78,7 +78,7 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
             >
-              👋 Welcome to my portfolio
+              Welcome to my portfolio
             </motion.div>
 
             <motion.h1
