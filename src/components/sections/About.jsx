@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { FiUser, FiCode, FiBriefcase, FiAward, FiDownload, FiArrowRight } from 'react-icons/fi';
+import { SiC, SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiCss3, SiBootstrap, SiTailwindcss, SiMui, SiAntdesign, SiReact, SiRedux, SiNextdotjs, SiNodedotjs, SiExpress, SiMongodb, SiMongoose, SiPrisma, SiPostgresql, SiGraphql, SiSocketdotio } from 'react-icons/si';
 
 const TabButton = ({ active, onClick, children, icon: Icon }) => (
   <motion.button
     onClick={onClick}
-    className={`flex items-center px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
-      active
+    className={`flex items-center px-6 py-3 rounded-xl font-medium transition-all duration-300 ${active
         ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20'
         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
-    }`}
+      }`}
     whileHover={{ y: -2 }}
     whileTap={{ scale: 0.98 }}
   >
@@ -77,28 +77,68 @@ const SkillBar = ({ name, level, color = 'primary' }) => {
   );
 };
 
+const skillIcons = {
+  // Languages
+  'C': { icon: <SiC className="w-6 h-6" />, color: 'text-blue-600' },
+  'C++': { icon: <SiCplusplus className="w-6 h-6" />, color: 'text-blue-700' },
+  'JavaScript': { icon: <SiJavascript className="w-6 h-6 text-yellow-400" />, color: 'text-yellow-400' },
+  'TypeScript': { icon: <SiTypescript className="w-6 h-6 text-blue-600" />, color: 'text-blue-600' },
+  // Frontend
+  'HTML5': { icon: <SiHtml5 className="w-6 h-6 text-orange-500" />, color: 'text-orange-500' },
+  'CSS3': { icon: <SiCss3 className="w-6 h-6 text-blue-500" />, color: 'text-blue-500' },
+  'Bootstrap': { icon: <SiBootstrap className="w-6 h-6 text-purple-600" />, color: 'text-purple-600' },
+  'Tailwind': { icon: <SiTailwindcss className="w-6 h-6 text-cyan-400" />, color: 'text-cyan-400' },
+  'MUI': { icon: <SiMui className="w-6 h-6 text-blue-500" />, color: 'text-blue-500' },
+  'Ant Design': { icon: <SiAntdesign className="w-6 h-6 text-red-500" />, color: 'text-red-500' },
+  'React': { icon: <SiReact className="w-6 h-6 text-cyan-500" />, color: 'text-cyan-500' },
+  'Redux': { icon: <SiRedux className="w-6 h-6 text-purple-500" />, color: 'text-purple-500' },
+  'NextJS': { icon: <SiNextdotjs className="w-6 h-6" />, color: 'text-black dark:text-white' },
+  // Backend
+  'NodeJS': { icon: <SiNodedotjs className="w-6 h-6 text-green-600" />, color: 'text-green-600' },
+  'ExpressJS': { icon: <SiExpress className="w-6 h-6" />, color: 'text-gray-800 dark:text-white' },
+  'MongoDB': { icon: <SiMongodb className="w-6 h-6 text-green-600" />, color: 'text-green-600' },
+  'Mongoose': { icon: <SiMongoose className="w-6 h-6 text-red-500" />, color: 'text-red-500' },
+  'Prisma': { icon: <SiPrisma className="w-6 h-6 text-blue-900 dark:text-white" />, color: 'text-blue-900 dark:text-white' },
+  'PostgreSQL': { icon: <SiPostgresql className="w-6 h-6 text-blue-700" />, color: 'text-blue-700' },
+  'GraphQL': { icon: <SiGraphql className="w-6 h-6 text-pink-600" />, color: 'text-pink-600' },
+  'Socket.IO': { icon: <SiSocketdotio className="w-6 h-6" />, color: 'text-black dark:text-white' },
+};
+
 const SkillCategory = ({ title, skills }) => (
   <div className="mb-8">
-    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
+    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
       {title}:
     </h4>
-    <div className="flex flex-wrap gap-2">
-      {skills.map((skill, index) => (
-        <motion.span
-          key={index}
-          className="px-3 py-1.5 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300"
-          whileHover={{ y: -2, scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          {skill}
-        </motion.span>
-      ))}
+    <div className="flex flex-wrap gap-3">
+      {skills.map((skill, index) => {
+        const skillData = skillIcons[skill] || {
+          icon: skill,
+          color: 'text-gray-800 dark:text-gray-200'
+        };
+
+        return (
+          <motion.div
+            key={index}
+            className="relative group"
+            whileHover={{ y: -3 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <div className={`p-3 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300 ${skillData.color}`}>
+              {skillData.icon}
+            </div>
+            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-900 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
+              {skill}
+              <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   </div>
 );
 
 const ExperienceItem = ({ role, company, duration, description, isLast }) => (
-  <motion.div 
+  <motion.div
     className="relative pl-8 pb-8 group"
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -123,7 +163,7 @@ const ExperienceItem = ({ role, company, duration, description, isLast }) => (
 );
 
 const StatCard = ({ value, label, icon: Icon }) => (
-  <motion.div 
+  <motion.div
     className="bg-white dark:bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
     whileHover={{ scale: 1.02 }}
     whileTap={{ scale: 0.98 }}
@@ -157,12 +197,9 @@ export const About = () => {
     },
     {
       title: "Backend",
-      skills: ["NodeJS", "ExpressJS", "Mongoose", "MongoDB", "Prisma", "KnexJS", "PostgreSQL", "GraphQL", "Socket.IO"]
-    },
-    {
-      title: "Deployment",
-      skills: ["CI/CD", "Docker", "AWS", "Digital Ocean", "Hostinger"]
+      skills: ["NodeJS", "ExpressJS", "Mongoose", "MongoDB", "Prisma", "PostgreSQL", "GraphQL", "Socket.IO"]
     }
+ 
   ];
 
   const experiences = [
@@ -215,13 +252,13 @@ export const About = () => {
   ];
 
   return (
-    <section 
-      id="about" 
+    <section
+      id="about"
       ref={targetRef}
       className="relative py-24 bg-gray-50 dark:bg-gray-900/50 overflow-hidden"
     >
       {/* Animated background elements */}
-      <motion.div 
+      <motion.div
         className="absolute inset-0 -z-10"
         style={{ y }}
       >
@@ -269,7 +306,7 @@ export const About = () => {
           </p>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700/50"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -338,7 +375,7 @@ export const About = () => {
                   </motion.div>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   className="grid grid-cols-2 gap-4"
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -365,15 +402,15 @@ export const About = () => {
                   </h3>
                   <div className="space-y-6">
                     {technicalSkills.map((category, index) => (
-                      <SkillCategory 
-                        key={index} 
-                        title={category.title} 
-                        skills={category.skills} 
+                      <SkillCategory
+                        key={index}
+                        title={category.title}
+                        skills={category.skills}
                       />
                     ))}
                   </div>
                 </motion.div>
-                
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -426,7 +463,7 @@ export const About = () => {
 
             <TabContent isActive={activeTab === 'experience'}>
               <div className="max-w-3xl mx-auto">
-                <motion.h3 
+                <motion.h3
                   className="text-2xl font-bold text-gray-800 dark:text-white mb-12 text-center"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -437,9 +474,9 @@ export const About = () => {
                 </motion.h3>
                 <div className="space-y-8">
                   {experiences.map((exp, index) => (
-                    <ExperienceItem 
-                      key={index} 
-                      {...exp} 
+                    <ExperienceItem
+                      key={index}
+                      {...exp}
                       isLast={index === experiences.length - 1}
                     />
                   ))}
@@ -449,7 +486,7 @@ export const About = () => {
 
             <TabContent isActive={activeTab === 'education'}>
               <div className="max-w-3xl mx-auto">
-                <motion.h3 
+                <motion.h3
                   className="text-2xl font-bold text-gray-800 dark:text-white mb-12 text-center"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -460,9 +497,9 @@ export const About = () => {
                 </motion.h3>
                 <div className="space-y-8">
                   {education.map((edu, index) => (
-                    <ExperienceItem 
-                      key={index} 
-                      {...edu} 
+                    <ExperienceItem
+                      key={index}
+                      {...edu}
                       isLast={index === education.length - 1}
                     />
                   ))}

@@ -34,7 +34,7 @@ function App() {
     <div className="min-h-screen bg-white dark:bg-dark text-gray-800 dark:text-gray-200 transition-colors duration-300">
       <Header />
       <main>
-        <section id="home" className="min-h-screen flex items-center">
+        <section id="home" className="h-screen flex items-center">
           <Hero />
         </section>
         <section id="about" className="py-20 bg-gray-50 dark:bg-gray-900">
