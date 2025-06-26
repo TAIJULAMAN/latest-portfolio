@@ -104,38 +104,115 @@ const skillIcons = {
   'Socket.IO': { icon: <SiSocketdotio className="w-6 h-6" />, color: 'text-black dark:text-white' },
 };
 
-const SkillCategory = ({ title, skills }) => (
-  <div className="mb-8">
-    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
-      {title}:
-    </h4>
-    <div className="flex flex-wrap gap-3">
-      {skills.map((skill, index) => {
-        const skillData = skillIcons[skill] || {
-          icon: skill,
-          color: 'text-gray-800 dark:text-gray-200'
-        };
+const SkillCategory = ({ title, skills }) => {
+  const [hoveredSkill, setHoveredSkill] = useState(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const hoverTimeout = useRef(null);
 
-        return (
-          <motion.div
-            key={index}
-            className="relative group"
-            whileHover={{ y: -3 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <div className={`p-3 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300 ${skillData.color}`}>
-              {skillData.icon}
-            </div>
-            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-900 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
-              {skill}
-              <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
-            </div>
-          </motion.div>
-        );
-      })}
+  const handleMouseEnter = (index) => {
+    if (hoverTimeout.current) {
+      clearTimeout(hoverTimeout.current);
+    }
+    
+    setHoveredSkill(index);
+    hoverTimeout.current = setTimeout(() => {
+      setShowTooltip(true);
+    }, 300);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimeout.current) {
+      clearTimeout(hoverTimeout.current);
+    }
+    setShowTooltip(false);
+    setHoveredSkill(null);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeout.current) {
+        clearTimeout(hoverTimeout.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="mb-8">
+      <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
+        {title}:
+      </h4>
+      <div className="flex flex-wrap gap-3">
+        {skills.map((skill, index) => {
+          const skillData = skillIcons[skill] || { 
+            icon: skill, 
+            color: 'text-gray-800 dark:text-gray-200' 
+          };
+          
+          return (
+            <motion.div 
+              key={index}
+              className="relative group"
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+              initial={{ scale: 1 }}
+              whileHover={{ 
+                y: -5,
+                scale: 1.05,
+                transition: { 
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 15
+                } 
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div 
+                className={`p-3 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-300 ${skillData.color} transform transition-transform duration-200`}
+              >
+                {skillData.icon}
+              </div>
+              
+              <motion.div 
+                className="absolute -bottom-10 left-1/2 transform -translate-x-1/2"
+                initial={{ opacity: 0, y: 5, scale: 0.95 }}
+                animate={{
+                  opacity: showTooltip && hoveredSkill === index ? 1 : 0,
+                  y: showTooltip && hoveredSkill === index ? 0 : 5,
+                  scale: showTooltip && hoveredSkill === index ? 1 : 0.95,
+                }}
+                transition={{
+                  duration: 0.2,
+                  ease: "easeOut"
+                }}
+              >
+                <div className="bg-gray-900 text-white text-xs py-1.5 px-3 rounded whitespace-nowrap shadow-lg">
+                  {skill}
+                  <div className="absolute -top-1.5 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45"></div>
+                </div>
+              </motion.div>
+              
+              {hoveredSkill === index && (
+                <motion.div 
+                  className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 opacity-0"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ 
+                    opacity: 0.3,
+                    scale: 1.1,
+                    transition: { 
+                      duration: 0.4,
+                      repeat: Infinity,
+                      repeatType: 'reverse'
+                    } 
+                  }}
+                />
+              )}
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ExperienceItem = ({ role, company, duration, description, isLast }) => (
   <motion.div
